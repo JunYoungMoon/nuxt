@@ -1,5 +1,5 @@
 <template>
-  <v-app dark>
+  <v-app :dark="isDark">
     <v-navigation-drawer v-model="drawer" :mini-variant="miniVariant" :clipped="clipped" fixed app>
       <v-list>
         <v-list-item v-for="(item, i) in items" :key="i" :to="item.to" router exact>
@@ -28,9 +28,10 @@
       <v-btn icon @click.stop="rightDrawer = !rightDrawer">
         <v-icon>mdi-menu</v-icon>
       </v-btn>
+      <v-switch v-model="isDark" label="Dark Theme" @change="toggleTheme" />
     </v-app-bar>
     <v-main>
-      <v-container>
+      <v-container fluid>
         <Nuxt />
       </v-container>
     </v-main>
@@ -75,7 +76,14 @@ export default {
             miniVariant: false,
             right: true,
             rightDrawer: false,
-            title: 'Vuetify.js'
+            title: 'Vuetify.js',
+            isDark: false
+        }
+    },
+
+    methods: {
+        toggleTheme () {
+            this.$vuetify.theme.dark = this.isDark
         }
     }
 }
