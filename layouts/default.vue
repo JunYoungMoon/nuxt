@@ -28,7 +28,9 @@
       <v-btn icon @click.stop="rightDrawer = !rightDrawer">
         <v-icon>mdi-menu</v-icon>
       </v-btn>
-      <v-switch v-model="isDark" label="Dark Theme" @change="toggleTheme" />
+      <v-btn @click="toggleTheme">
+        <i :class="iconClass" />
+      </v-btn>
     </v-app-bar>
     <v-main>
       <v-container fluid>
@@ -80,10 +82,15 @@ export default {
             isDark: false
         }
     },
-
+    computed: {
+        iconClass () {
+            return this.$vuetify.theme.dark ? 'mdi mdi-weather-night' : 'mdi mdi-weather-sunny'
+        }
+    },
     methods: {
         toggleTheme () {
-            this.$vuetify.theme.dark = this.isDark
+            const isDark = this.$vuetify.theme.dark
+            this.$vuetify.theme.dark = !isDark
         }
     }
 }
