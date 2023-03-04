@@ -15,13 +15,7 @@ export const actions = {
     nuxtServerInit ({ commit }, { app }) {
         const cookies = app.$cookies
         const theme = cookies.get('theme')
-        if (theme === 'dark') {
-            commit('theme/setTheme', true)
-            this.$vuetify.theme.dark = true
-        } else {
-            commit('theme/setTheme', false)
-            this.$vuetify.theme.dark = false
-        }
+        commit('theme/setTheme', theme === 'dark')
     }
 }
 

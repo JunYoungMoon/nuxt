@@ -90,16 +90,20 @@ export default {
             return this.$vuetify.theme.dark ? 'mdi mdi-weather-night' : 'mdi mdi-weather-sunny'
         }
     },
-    mounted () {
-        const theme = this.$cookies.get('theme')
-        if (theme === 'dark') {
-            this.$store.commit('theme/setTheme', true)
-            this.$vuetify.theme.dark = true
-        } else {
-            this.$store.commit('theme/setTheme', false)
-            this.$vuetify.theme.dark = false
-        }
+    created () {
+        this.$vuetify.theme.dark = this.$store.state.theme.isDark
     },
+    // mounted () {
+    //     this.$vuetify.theme.dark = true
+    //     // const theme = this.$cookies.get('theme')
+    //     // if (theme === 'dark') {
+    //     //     this.$store.commit('theme/setTheme', true)
+    //     //     this.$vuetify.theme.dark = true
+    //     // } else {
+    //     //     this.$store.commit('theme/setTheme', false)
+    //     //     this.$vuetify.theme.dark = false
+    //     // }
+    // },
     methods: {
         toggleTheme () {
             const isDark = !this.$vuetify.theme.dark
