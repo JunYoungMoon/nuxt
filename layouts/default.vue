@@ -28,8 +28,8 @@
       <v-btn icon @click.stop="rightDrawer = !rightDrawer">
         <v-icon>mdi-menu</v-icon>
       </v-btn>
-      <v-btn @click="toggleTheme">
-        <i :class="iconClass" />
+      <v-btn icon @click="toggleTheme">
+        <i :class="iconClass" style="font-size: 30px;" />
       </v-btn>
     </v-app-bar>
     <v-main>
@@ -58,6 +58,9 @@
 <script>
 export default {
     name: 'DefaultLayout',
+    async asyncData ({ store, app }) {
+        await store.dispatch('nuxtServerInit', { app })
+    },
     data () {
         return {
             clipped: false,
@@ -87,10 +90,22 @@ export default {
             return this.$vuetify.theme.dark ? 'mdi mdi-weather-night' : 'mdi mdi-weather-sunny'
         }
     },
+    mounted () {
+        const theme = this.$cookies.get('theme')
+        if (theme === 'dark') {
+            this.$store.commit('theme/setTheme', true)
+            this.$vuetify.theme.dark = true
+        } else {
+            this.$store.commit('theme/setTheme', false)
+            this.$vuetify.theme.dark = false
+        }
+    },
     methods: {
         toggleTheme () {
-            const isDark = this.$vuetify.theme.dark
-            this.$vuetify.theme.dark = !isDark
+            const isDark = !this.$vuetify.theme.dark
+            this.$vuetify.theme.dark = isDark
+            this.$store.commit('theme/setTheme', isDark)
+            this.$cookies.set('theme', isDark ? 'dark' : 'light')
         }
     }
 }
