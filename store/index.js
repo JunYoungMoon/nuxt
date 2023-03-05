@@ -13,6 +13,8 @@ if (process.browser) {
 
 export const actions = {
     nuxtServerInit ({ commit }, { app }) {
+        /* eslint-disable */
+        console.log('nuxtServerInit executed')
         const cookies = app.$cookies
         const theme = cookies.get('theme')
         commit('theme/setTheme', theme === 'dark')
