@@ -1,5 +1,5 @@
 <template>
-  <v-app>
+  <v-app :dark="isDark">
     <v-navigation-drawer v-model="drawer" :mini-variant="miniVariant" :clipped="clipped" fixed app>
       <v-list>
         <v-list-item v-for="(item, i) in items" :key="i" :to="item.to" router exact>
@@ -81,7 +81,8 @@ export default {
             miniVariant: false,
             right: true,
             rightDrawer: false,
-            title: 'Vuetify.js'
+            title: 'Vuetify.js',
+            isDark: true // default value
         }
     },
     computed: {
@@ -90,7 +91,10 @@ export default {
         }
     },
     created () {
-        this.$vuetify.theme.dark = this.$store.state.isDark
+        // if (process.browser) {
+        //     const theme = localStorage.getItem('theme')
+        //     this.$vuetify.theme.dark = theme !== 'light'
+        // }
     },
 
     // mounted () {
@@ -109,7 +113,7 @@ export default {
             const isDark = !this.$vuetify.theme.dark
             this.$vuetify.theme.dark = isDark
             this.$store.commit('theme/setTheme', isDark)
-            window.localStorage.setItem('theme', isDark ? 'dark' : 'light') // 로컬 스토리지에 테마 정보 저장
+            window.localStorage.setItem('theme', isDark ? 'dark' : 'light')
         }
     }
 }
