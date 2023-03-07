@@ -91,6 +91,10 @@ export default {
         }
     },
     created () {
+        const theme = localStorage.getItem('theme')
+        if (theme === 'dark') {
+            this.$vuetify.theme.dark = true
+        }
         // if (process.browser) {
         //     const theme = localStorage.getItem('theme')
         //     this.$vuetify.theme.dark = theme !== 'light'
