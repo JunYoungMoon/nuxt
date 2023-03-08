@@ -91,10 +91,11 @@ export default {
         }
     },
     created () {
-        const theme = localStorage.getItem('theme')
-        if (theme === 'dark') {
-            this.$vuetify.theme.dark = true
-        }
+        this.$vuetify.theme.dark = this.$store.state.isDark
+        // const theme = localStorage.getItem('theme')
+        // if (theme === 'dark') {
+        //     this.$vuetify.theme.dark = true
+        // }
         // if (process.browser) {
         //     const theme = localStorage.getItem('theme')
         //     this.$vuetify.theme.dark = theme !== 'light'
@@ -116,8 +117,8 @@ export default {
         toggleTheme () {
             const isDark = !this.$vuetify.theme.dark
             this.$vuetify.theme.dark = isDark
-            this.$store.commit('theme/setTheme', isDark)
-            window.localStorage.setItem('theme', isDark ? 'dark' : 'light')
+            this.$store.commit('setTheme', isDark, { root: true })
+            document.cookie = `theme=${isDark ? 'dark' : 'light'}; expires=Fri, 31 Dec 9999 23:59:59 GMT; path=/`
         }
     }
 }
