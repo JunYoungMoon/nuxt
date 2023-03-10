@@ -1,5 +1,29 @@
 <template>
   <v-app>
+    <v-header>
+      <v-menu
+        :close-on-click="false"
+        :open-on-hover="true"
+        offset-y
+        nudge-top="1"
+      >
+        <template #activator="{ on }">
+          <v-btn
+            color="primary"
+            dark
+            v-on="on"
+          >
+            메뉴
+          </v-btn>
+        </template>
+        <v-list>
+          <v-list-item v-for="(item, i) in items" :key="i">
+            <v-list-item-title>{{ item.title }}</v-list-item-title>
+          </v-list-item>
+        </v-list>
+      </v-menu>
+    </v-header>
+
     <v-navigation-drawer v-model="drawer" :mini-variant="miniVariant" :clipped="clipped" fixed app>
       <v-list>
         <v-list-item v-for="(item, i) in items" :key="i" :to="item.to" router exact>
