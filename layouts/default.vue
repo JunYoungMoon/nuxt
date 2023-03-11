@@ -1,29 +1,61 @@
 <template>
   <v-app>
-    <v-header>
-      <v-menu
-        :close-on-click="false"
-        :open-on-hover="true"
-        offset-y
-        nudge-top="1"
-      >
+    <v-app-bar app color="primary" dark>
+      <v-toolbar-title>
+        <v-img src="~/assets/logo.png" height="40" />
+      </v-toolbar-title>
+
+      <v-spacer />
+
+      <v-menu offset-y open-on-hover>
         <template #activator="{ on }">
-          <v-btn
-            color="primary"
-            dark
-            v-on="on"
-          >
-            메뉴
+          <v-btn v-on="on">
+            Market
           </v-btn>
         </template>
         <v-list>
-          <v-list-item v-for="(item, i) in items" :key="i">
-            <v-list-item-title>{{ item.title }}</v-list-item-title>
+          <v-list-item v-for="(item, index) in marketItems" :key="index" :href="item.link">
+            <v-list-item-title>{{ item.text }}</v-list-item-title>
           </v-list-item>
         </v-list>
       </v-menu>
-    </v-header>
 
+      <v-menu offset-y open-on-hover>
+        <template #activator="{ on }">
+          <v-btn v-on="on">
+            Artist
+          </v-btn>
+        </template>
+        <v-list>
+          <v-list-item v-for="(item, index) in artistItems" :key="index" :href="item.link">
+            <v-list-item-title>{{ item.text }}</v-list-item-title>
+          </v-list-item>
+        </v-list>
+      </v-menu>
+
+      <v-menu offset-y open-on-hover>
+        <template #activator="{ on }">
+          <v-btn v-on="on">
+            Create
+          </v-btn>
+        </template>
+        <v-list>
+          <v-list-item v-for="(item, index) in createItems" :key="index" :href="item.link">
+            <v-list-item-title>{{ item.text }}</v-list-item-title>
+          </v-list-item>
+        </v-list>
+      </v-menu>
+      <v-btn icon @click="toggleTheme">
+        <i :class="iconClass" style="font-size: 30px;" />
+      </v-btn>
+    </v-app-bar>
+    <v-content>
+      <v-container>
+        <!-- 콘텐츠 내용을 여기에 추가합니다. -->
+      </v-container>
+    </v-content>
+    <v-footer app />
+    <!--
     <v-navigation-drawer v-model="drawer" :mini-variant="miniVariant" :clipped="clipped" fixed app>
       <v-list>
         <v-list-item v-for="(item, i) in items" :key="i" :to="item.to" router exact>
@@ -52,9 +84,6 @@
       <v-btn icon @click.stop="rightDrawer = !rightDrawer">
         <v-icon>mdi-menu</v-icon>
       </v-btn>
-      <v-btn icon @click="toggleTheme">
-        <i :class="iconClass" style="font-size: 30px;" />
-      </v-btn>
     </v-app-bar>
     <v-main>
       <v-container fluid>
@@ -75,7 +104,7 @@
     </v-navigation-drawer>
     <v-footer :absolute="!fixed" app>
       <span>&copy; {{ new Date().getFullYear() }}</span>
-    </v-footer>
+    </v-footer>-->
   </v-app>
 </template>
 
@@ -90,17 +119,18 @@ export default {
             clipped: false,
             drawer: false,
             fixed: false,
-            items: [
-                {
-                    icon: 'mdi-apps',
-                    title: 'Welcome',
-                    to: '/'
-                },
-                {
-                    icon: 'mdi-chart-bubble',
-                    title: 'Inspire',
-                    to: '/inspire'
-                }
+            marketItems: [
+                { text: 'Music', link: '/market/music' },
+                { text: 'Resale', link: '/market/resale' }
+            ],
+            artistItems: [
+                { text: 'My Profile', link: '/artist/profile' },
+                { text: 'My Songs', link: '/artist/songs' },
+                { text: 'My Albums', link: '/artist/albums' }
+            ],
+            createItems: [
+                { text: 'New Song', link: '/create/song' },
+                { text: 'New Album', link: '/create/album' }
             ],
             miniVariant: false,
             right: true,
@@ -124,6 +154,9 @@ export default {
             this.$vuetify.theme.dark = isDark
             this.$store.commit('setTheme', isDark, { root: true })
             document.cookie = `theme=${isDark ? 'dark' : 'light'}; expires=Fri, 31 Dec 9999 23:59:59 GMT; path=/`
+        },
+        onClick (item) {
+        // 아이템 클릭 시 발생할 이벤트를 처리합니다.
         }
     }
 }
