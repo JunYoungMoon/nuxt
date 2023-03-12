@@ -58,8 +58,16 @@
 <script>
 export default {
     name: 'DefaultLayout',
-    async asyncData ({ store, app }) {
+    async asyncData ({ store, app, $axios }) {
+        // nuxtServerInit 호출
         await store.dispatch('nuxtServerInit', { app })
+
+        // FRED API 호출
+        const response = await $axios.$get(
+            `https://api.stlouisfed.org/fred/series/observations?series_id=CPALTT01USM657N&api_key=${process.env.FRED_API_KEY}&file_type=json`
+        )
+
+        console.log(response)
     },
     data () {
         return {
@@ -93,7 +101,6 @@ export default {
     created () {
         this.$vuetify.theme.dark = this.$store.state.isDark
     },
-
     methods: {
         toggleTheme () {
             const isDark = !this.$vuetify.theme.dark
