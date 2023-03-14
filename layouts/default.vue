@@ -61,13 +61,6 @@ export default {
     async asyncData ({ store, app, $axios }) {
         // nuxtServerInit 호출
         await store.dispatch('nuxtServerInit', { app })
-
-        // FRED API 호출
-        const response = await $axios.$get(
-            `https://api.stlouisfed.org/fred/series/observations?series_id=CPALTT01USM657N&api_key=${process.env.FRED_API_KEY}&file_type=json`
-        )
-
-        console.log(response)
     },
     data () {
         return {

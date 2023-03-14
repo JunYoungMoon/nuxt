@@ -57,6 +57,14 @@
 
 <script>
 export default {
-    name: 'IndexPage'
+    name: 'IndexPage',
+    async asyncData ({ $axios }) {
+        // FRED API 호출
+        const response = await $axios.$get(
+            `https://api.stlouisfed.org/fred/series/observations?series_id=CPALTT01USM657N&api_key=${process.env.FRED_API_KEY}&file_type=json`
+        )
+
+        console.log(response)
+    }
 }
 </script>
