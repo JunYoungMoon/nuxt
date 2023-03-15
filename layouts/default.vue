@@ -58,7 +58,7 @@
 <script>
 export default {
     name: 'DefaultLayout',
-    async asyncData ({ store, app, $axios }) {
+    async asyncData ({ store, app }) {
         // nuxtServerInit 호출
         await store.dispatch('nuxtServerInit', { app })
     },
@@ -96,6 +96,7 @@ export default {
     },
     methods: {
         toggleTheme () {
+            console.log('111')
             const isDark = !this.$vuetify.theme.dark
             this.$vuetify.theme.dark = isDark
             this.$store.commit('setTheme', isDark, { root: true })

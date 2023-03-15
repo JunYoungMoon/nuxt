@@ -1,70 +1,97 @@
 <template>
-  <v-row justify="center" align="center">
-    <v-col cols="12" sm="12" md="12">
-      <v-card class="logo py-4 d-flex justify-center">
-        <NuxtLogo />
-        <VuetifyLogo />
-      </v-card>
-      <v-card>
-        <v-card-title class="headline">
-          Welcome to the Vuetify + Nuxt.js template
-        </v-card-title>
-        <v-card-text>
-          <p>
-            Vuetify is a progressive Material Design component framework for Vue.js. It was designed to empower
-            developers to create amazing
-            applications.
-          </p>
-          <p>
-            For more information on Vuetify, check out the
-            <a href="https://vuetifyjs.com" target="_blank" rel="noopener noreferrer"> documentation </a>.
-          </p>
-          <p>
-            If you have questions, please join the official
-            <a href="https://chat.vuetifyjs.com/" target="_blank" rel="noopener noreferrer" title="chat"> discord </a>.
-          </p>
-          <p>
-            Find a bug? Report it on the github
-            <a
-              href="https://github.com/vuetifyjs/vuetify/issues"
-              target="_blank"
-              rel="noopener noreferrer"
-              title="contribute"
-            > issue board </a>.
-          </p>
-          <p>
-            Thank you for developing with Vuetify and I look forward to bringing more exciting features in the
-            future.
-          </p>
-          <div class="text-xs-right">
-            <em><small>&mdash; John Leider</small></em>
-          </div>
-          <hr class="my-3">
-          <a href="https://nuxtjs.org/" target="_blank" rel="noopener noreferrer"> Nuxt Documentation </a>
-          <br>
-          <a href="https://github.com/nuxt/nuxt.js" target="_blank" rel="noopener noreferrer"> Nuxt GitHub </a>
-        </v-card-text>
-        <v-card-actions>
-          <v-spacer />
-          <v-btn color="primary" nuxt to="/inspire">
-            Continue
-          </v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-col>
-  </v-row>
+  <div>
+    <canvas id="myChart" />
+  </div>
 </template>
 
 <script>
+import Chart from 'chart.js'
+
 export default {
     name: 'IndexPage',
     async asyncData ({ $axios }) {
-        // FRED API 호출
-        const response = await $axios.$get(
-            `https://api.stlouisfed.org/fred/series/observations?series_id=CPALTT01USM657N&api_key=${process.env.FRED_API_KEY}&file_type=json`
-        )
+        const url = 'https://api.stlouisfed.org/fred/series/observations'
 
-        console.log(response)
+        // Start date and end date for the data
+        const startDate = '2010-01-01'
+        const endDate = new Date().toISOString().slice(0, 10) // Today's date
+
+        // Parameters for the API request
+        const params = {
+            series_id: 'CPALTT01USM657N',
+            api_key: process.env.FRED_API_KEY,
+            file_type: 'json',
+            observation_start: startDate,
+            observation_end: endDate
+        }
+
+        try {
+        // Fetch data from the FRED API using axios
+            const response = await $axios.get(url, { params })
+            const data = response.data
+
+            // Extract the data points from the API response
+            const series = data.observations.map(observation => ({
+                date: new Date(observation.date),
+                value: observation.value
+            }))
+
+            // Sort the data points by date
+            series.sort((a, b) => a.date - b.date)
+
+            // Extract the dates and values as separate arrays
+            const dates = series.map(point => point.date)
+            const values = series.map(point => point.value)
+
+            // Create a chart using Chart.js library
+            const ctx = document.getElementById('myChart')
+            const myChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: dates,
+                    datasets: [{
+                        label: 'CPI',
+                        data: values,
+                        backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                        borderColor: 'rgba(255, 99, 132, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        xAxes: [{
+                            type: 'time',
+                            time: {
+                                unit: 'year'
+                            }
+                        }],
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero: true
+                            }
+                        }]
+                    }
+                }
+            })
+        } catch (error) {
+            console.error(error)
+        }
+    },
+    data () {
+        return {
+            chart: null,
+            chartData: null,
+            chartOptions: null
+        }
+    },
+    mounted () {
+    // Create a new chart using Chart.js library
+        const ctx = document.getElementById('myChart')
+        this.chart = new Chart(ctx, {
+            type: 'line',
+            data: this.chartData,
+            options: this.chartOptions
+        })
     }
 }
 </script>
