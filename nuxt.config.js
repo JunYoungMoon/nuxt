@@ -88,5 +88,18 @@ export default {
     },
 
     // Build Configuration: https://go.nuxtjs.dev/config-build
-    build: {}
+    build: {
+        extend (config, { isClient }) {
+            // Add the Chart.js loader rule
+            config.module.rules.push({
+                test: /chart\.js$/,
+                use: {
+                    loader: 'babel-loader',
+                    options: {
+                        presets: ['@babel/preset-env']
+                    }
+                }
+            })
+        }
+    }
 }
