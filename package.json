@@ -16,6 +16,7 @@
   "dependencies": {
     "@nuxtjs/axios": "^5.13.6",
     "chart.js": "^4.2.1",
+    "chartjs-plugin-zoom": "^2.0.1",
     "core-js": "^3.25.3",
     "js-cookie": "^3.0.1",
     "nuxt": "^2.15.8",

@@ -32,7 +32,8 @@ export default {
 
     // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
     plugins: [
-        { src: '~/plugins/cookies', ssr: false }
+        { src: '~plugins/chart-zoom.js', ssr: false },
+        { src: '~plugins/cookies', ssr: false }
     ],
 
     // Auto import components: https://go.nuxtjs.dev/config-components
